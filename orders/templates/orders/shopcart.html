@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Shopcart</title>
+{% endblock title %}
+
+{% block navbar %}
+{% include "book_app/includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block shopcart %}
+
+{% if cart %}
+
+    <main>
+        <div class="basket">
+          <div class="basket-labels">
+            <ul>
+              <li class="item item-heading">Item</li>
+              <li class="price">Price</li>
+              <li class="quantity">Quantity</li>
+              <li class="subtotal">Subtotal</li>
+            </ul>
+          </div>
+          {% for item in cart %}
+          <div class="basket-product">
+            <div class="item">
+              <div class="product-image">
+                <img src="{{ item.book.book_image.url }}" alt="Placholder Image 2" class="product-frame">
+              </div>
+              <div class="product-details">
+                <p>{{ item.quantity }}<strong> x {{ item.book.title }}</strong></p>
+              </div>
+            </div>
+            <div class="price">{{ item.book.price }}</div>
+            <div class="quantity">
+            <form  action="{% url 'updatequantity' item.pk %}" method="post" class="update-form">
+            {% csrf_token %}
+                <input type="number" name="newquantity" value="{{ item.quantity }}" min="{{ item.book.minquantity }}" max="{{ item.boook.quantity_instock }}" class="quantity-field">
+                <button type="submit" class="mt-2 text-center">Update Quantity</button>
+            </form> 
+            </div>
+            <div class="subtotal">{{ item.amount }}</div>
+            <div class="remove">
+                <button><a href="{% url 'delete-item' item.pk %}" type="submit" class="text-decoration-none text-secondary">Remove</a></button>  
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <aside class="shop-aside">
+          <div class="summary">
+            <div class="summary-total-items"><span class="total-items"></span> Items in your Bag</div>
+            <div class="summary-subtotal">
+              <div class="subtotal-title">Subtotal</div>
+              <div class="subtotal-value final-value" id="basket-subtotal">{{ subtotal }}</div>
+              <div class="subtotal-title">VAT</div>
+              <div class="subtotal-value final-value" id="basket-subtotal">{{ vat }}</div>
+              <div class="subtotal-title">Shipping Fee</div>
+              <div class="subtotal-value final-value" id="basket-subtotal">{{ shipping_fee }}</div>
+            </div>
+            <div class="summary-delivery">
+            </div>
+            <div class="summary-total">
+              <div class="total-title">Total</div>
+              <div class="total-value final-value" id="basket-total">{{ total }}</div>
+            </div>
+            <div class="summary-checkout">
+              <a href="{% url 'checkout' %}"><button class="checkout-cta">Go to Secure Checkout</button></a>
+            </div>
+          </div>
+        </aside>
+      </main>
+{% else %}
+    <h3 class="text-center mt-5">No items in your cart</h3>
+{% endif %}
+
+
+{% endblock shopcart %}
+
+{% block footer %}
+  {% include "book_app/includes/footer.html" %}
+{% endblock footer %}
+

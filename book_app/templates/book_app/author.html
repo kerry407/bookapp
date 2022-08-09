@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}
+  <title>Author Page</title>
+{% endblock title %}
+
+{% block navbar %}
+  {% include "book_app/includes/book_nav.html" %}
+{% endblock navbar %}
+
+
+{% block book-list %}
+  <section class="container-fluid">
+    <div class="heading_container heading_center mt-5">
+      <h2>
+        Books by {{specific_author.first_name}} {{specific_author.last_name}}
+      </h2>
+    </div>
+    <div id="wrapper">
+      <div id="flexContainer">
+      {% for book in books_by_author %}           
+          <div class="flexItems">
+            <div class="bookImage"><img src="{{ book.book_image.url }}" alt=""></div>
+            <div class="description">
+              <h3 class="book-title-h3"><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h3>
+              <h3 class="book-author-h3">{{ book.author }}</h3>
+              <div class="d-flex justify-content-between align-items-baseline group-rating">
+                <h6 class="d-flex mt-3 p-0 star-rating">
+                  {% if book.rating == 1 %}     
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  {% elif book.rating == 2 %}
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  {% elif book.rating == 3 %}
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  {% elif book.rating == 4 %}
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-o"></i>
+                  {% else %}
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  {% endif %}
+                </h6>            
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+    </div>
+  </section>
+  <!-- <div class="page-content page-container" id="page-content"> -->
+    <div class="padding">
+      <div class="container d-flex justify-content-center pagination-success">   
+          <nav>
+            {% if books_by_author.has_other_pages %}
+              <ul class="pagination d-flex justify-content-center text-nowrap">
+                  {% if books_by_author.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ books_by_author.previous_page_number }}" data-abc="true"><i class="fa fa-angle-left"></i></a></li>
+                  {% else %}
+                    <li class="page-item"><a class="page-link" data-abc="true"><i class="fa fa-angle-left"></i></a></li>
+                  {% endif %}
+
+                  {% for item in books_by_author.paginator.page_range %}
+                    {% if books_by_author.number == item %}
+                    <li class="page-item"><a class="page-link" data-abc="true">{{ item }}</a></li>
+                    {% else %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ item }}" data-abc="true">{{ item }}</a></li>
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if books_by_author.has_next %}
+                  <!-- <li class="page-item"><a class="page-link" href="?page={{ books_by_author.paginator.num_pages }}" data-abc="true">{{ books_by_author.paginator.num_pages }}</i></a></li> -->
+                  <li class="page-item"><a class="page-link" href="?page={{ books_by_author.next_page_number }}" data-abc="true"><i class="fa fa-angle-right"></i></a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" data-abc="true"><i class="fa fa-angle-right"></i></a></li>
+                  {% endif %}
+                </ul>
+              {% endif %}
+          </nav>
+      </div>
+  </div>
+<!-- </div> -->
+
+  
+{% endblock book-list %}
+
+{% block footer %}
+  {% include "book_app/includes/footer.html" %}
+{% endblock footer %}

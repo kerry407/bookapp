@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Checkout</title>
+{% endblock title %}
+
+{% block navbar %}
+{% include "book_app/includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block order-completed %}
+  <!-- order completed details  -->
+
+    <div class="container">
+        <h2 class="text-center mt-5 fw-bold">Order Completed <span class="text-success"><i class="fa fa-check-circle-o"></i></span></h2>   
+        <div class="d-flex justify-content-center">
+            <div class=" text-center mt-5">
+                <h4>Dear <span class="text-danger">{{ profile.user.first_name }} {{ profile.user.last_name }}</span></h4>
+                <h5 class="mt-1">Your Order is Completed</h5>
+                <p class="mt-1">Thank You for your patronage</p>
+            </div>
+        </div>     
+    </div>
+
+                                                                                                                                                                                                                                                                            
+<!-- order completed details end here  -->
+{% endblock order-completed %}

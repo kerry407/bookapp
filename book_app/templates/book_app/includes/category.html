@@ -1,0 +1,36 @@
+
+{% load static %}
+
+{% block category-list %}
+   <!-- catagory section -->
+
+   <section class="catagory_section layout_padding">
+    <div class="catagory_container">
+      <div class="container ">
+        <div class="heading_container heading_center">
+          <h2>
+            Books Categories
+          </h2>
+        </div>
+        <div class="row">
+        {% for category in category_list %}
+          <div class="col-sm-6 col-md-4 ">
+            <div class="box ">
+              <div class="img-box">
+                <img src="{{ category.image.url }}" alt="">
+              </div>
+              <div class="detail-box">
+                <h5>
+                  <a href="{% url 'category-page' category.title %}" class="text-decoration-none">{{ category.title }}</a>   
+                </h5>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end catagory section -->
+{% endblock category-list %}

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+<title>Checkout</title>
+{% endblock title %}
+
+{% block navbar %}
+{% include "book_app/includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block checkout %}
+<div class="container rounded bg-white">
+    <div class="row d-flex pb-5 payment">
+        <div class="col-sm-5 col-md-5 ">
+            <div class="py-4 d-flex flex-row">
+                <h5><span class="fa fa-check-square-o"></span><b>ELIGIBLE</b> | </h5><span class="pl-2">Pay</span>
+            </div>
+            <h4>Total: <span class="green">${{ total }}</span></h4>
+            {% for item in cart %}              
+            <div class="d-flex pt-2 align-items-baseline">
+                <div><p><b><h4>{{ item.quantity }} x {{ item.book.title }}</h4></b></p></div>
+                <div class="ml-auto"><p class="text-primary text-nowrap"><i class="fa fa-money text-primary fs-1"></i> ${{ item.amount }}</p></div>
+            </div>
+            <a href="{% url 'delete-item' item.pk %}" type="submit" class=" text-secondary">Remove</a>
+            {% endfor %}
+            <div class="p-2 d-flex mt-5 justify-content-between">
+                <div class="col text-nowrap">Order Code:</div>
+                <div class=" text-success">{{ order_code }}</div>
+            </div>
+            <hr>
+            <div class="col-12 bg-white px-3 mb-3 pb-3">
+                <h6 class="d-flex align-items-center mb-3 fw-bold py-3"><i
+                    class="text-info me-2">Delivery details</i>
+                </h6>
+                <div class="d-flex align-items-center justify-content-between border-bottom">
+                    <p class="py-2">Email</p>
+                    <p class="py-2 text-muted">{{ get_profile.user.email }}</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between border-bottom">
+                    <p class="py-2">Mobile Number</p>
+                    {% if get_profile.phone1 %}
+                    <p class="py-2 text-muted">{{ get_profile.phone1 }}</p>
+                    {% else %}
+                    <p class="py-2 text-muted">-</p>
+                    {% endif %}
+                </div>
+                <div class="d-flex align-items-center justify-content-between border-bottom">
+                    <p class="py-2">Secondary Phone Number</p>
+                    {% if get_profile.phone2 %}
+                    <p class="py-2 text-muted">{{ get_profile.phone2}}</p>
+                    {% else %}
+                    <p class="py-2 text-muted">-</p>
+                    {% endif %}
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                    <p class="py-2">Address</p>
+                    {% if get_profile.address %}
+                    <p class="py-2 text-muted"> {{ get_profile.address }}</p>
+                    {% else %}
+                    <p class="py-2 text-muted">-</p>
+                    {% endif %}
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                    <p class="py-2">City</p>
+                    {% if get_profile.city %}
+                    <p class="py-2 text-muted"> {{ get_profile.city }}</p>
+                    {% else %}
+                    <p class="py-2 text-muted">-</p>
+                    {% endif %}
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                    <p class="py-2">Postal Code</p>
+                    {% if get_profile.zip_code  %}
+                    <p class="py-2 text-muted"> {{ get_profile.zip_code }}</p>
+                    {% else %}
+                    <p class="py-2 text-muted">-</p>
+                    {% endif %}
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                    <p class="py-2">Country</p>
+                    {% if get_profile.country.name %}
+                    <p class="py-2 text-muted"> {{ get_profile.country.name }} ({{ get_profile.country }})</p>
+                    {% else %}
+                    <p class="py-2 text-muted"> - </p>
+                    {% endif %}
+                </div>
+                <a href="{% url 'update-profile' %}" class="btn btn-success">edit details</a>
+            </div>
+            <hr>
+            <div class="pt-2">
+                <div class="d-flex align-items-baseline">
+                    <div><p><b>Payment Options</b></p></div>
+                    <div class="ml-auto p-2"><p class="text-primary"><i class="fa fa-credit-card text-primary"></i></p></div>
+                </div>
+                <form class="pb-3">
+                    <div class="d-flex flex-row w-100">
+                        <div class="rounded  d-flex w-100 px-2">
+                            <img src="{% static 'images/Paystack_Logo.png' %}" alt="" height="22" id="paystack-logo">
+                        </div>
+                    </div>
+                </form>
+                
+                    {% if get_profile.user.email and get_profile.address and get_profile.phone1 and get_profile.phone2 and get_profile.city and get_profile.zip_code and get_profile.country %}
+                      
+                        {% if total != 0 %}                
+                        <div>
+                            <form action="{% url 'order' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="ordernumber" value="{{ order_code }}">
+                                <input type="hidden" name="total" value="{{ total }}">
+                                <button type="submit" class="btn btn-primary btn-block">Proceed to payment</button>
+                            </form>
+                        </div>
+                        {% else %}
+                        <div class="rounded bg-light d-flex">
+                            <div class="p-2"><a href="{% url 'all-books' %}" class="text-center">Add items in your cart to proceed</a></div>
+                        </div>
+                        {% endif %}
+
+                    {% else %}
+                        <div class="rounded bg-light d-flex">
+                            <div class="p-2"><a href="{% url 'update-profile' %}" class="text-center">Please fill all fields for shipping details</a></div>
+                        </div>
+                    {% endif %}
+
+         
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-5 offset-md-1 mobile">
+            <div class="py-4 d-flex justify-content-end">
+                <h6><a href="{% url 'book-home' %}">Cancel and return to website</a></h6>
+            </div>
+            <div class="bg-light rounded d-flex flex-column order-recap">
+                <div class="p-2 ml-3"><h4>Order Recap</h4></div>
+                <div class="p-2 d-flex">
+                    <div class="col-8">Subtotal</div>
+                    <div class="ml-auto">${{ subtotal }}</div>
+                </div>
+                <div class="p-2 d-flex">
+                    <div class="col-8">VAT (7.5%)</div>
+                    <div class="ml-auto">${{ vat }}</div>
+                </div>
+                <div class="p-2 d-flex">
+                    <div class="col-8">Shipping Fee</div>
+                    <div class="ml-auto">${{ shipping_fee }}</div>
+                </div>
+                <div class="border-top px-4 mx-3"></div>
+                <div class="p-2 d-flex pt-3">
+                    <div class="col-8"><b>Total</b></div>
+                    <div class="ml-auto"><b class="green">${{ total }}<br>(&#8773; &#8358; {{ naira_total }})</b></div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+{% endblock checkout %}
+
+{% block footer %}
+  {% include "book_app/includes/footer.html" %}
+{% endblock footer %}

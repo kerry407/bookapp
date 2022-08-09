@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Checkout</title>
+{% endblock title %}
+
+{% block navbar %}
+{% include "book_app/includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block order-history %}
+
+{% if payments %}
+<div class="col-12 bg-white px-3 pb-2">
+  <h6 class="d-flex align-items-center mb-3 fw-bold py-3 justify-content-center">
+      <i class="text-info me-2">Order</i>History
+  </h6>
+</div>
+<div class="container ">
+<table class="table table-striped main">
+<thead class=" thead-dark">
+<tr class="head">
+
+<th scope="col"><strong>Order ID</strong></th>
+<th scope="col"><strong>Created</strong></th>
+<th scope="col"><strong>Arrival Status</strong></th>
+<th scope="col"><strong>Total ($)</strong></th>
+<th scope="col"><strong>Country</strong></th>
+<th scope="col"><strong>Updated</strong></th>
+<th scope="col"><strong>Address</strong></th>
+</tr>
+</thead>
+{% for payment in payments %}
+
+<tbody>
+<tr class="rounded bg-white">
+<th scope="row" class="order-color">{{ payment.payment_code }}</th>
+<td>{{ payment.created_at }}</td>
+<td>
+    <div class="dropdown">
+<button class="btn btn-warning btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+Pending
+</button>
+<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+<li><a class="dropdown-item" href="#">Fullfilled</a></li>
+<li><a class="dropdown-item" href="#">Unfullfilled</a></li>
+<li><a class="dropdown-item" href="#">Hold</a></li>
+</ul>
+</div>
+</td>
+<td>{{ payment.total | floatformat:2 }}</td>
+<td>
+<div>
+{{ payment.country.name }}
+</div>
+</td>
+<td>{{ payment.updated_at }}</td>
+<td class="d-flex align-items-center">
+<span class="ml-2">{{ payment.address }}, {{ payment.city}}.</span>
+</td>
+</tr>
+</tbody>
+{% endfor %}
+</table>
+<p class="text-center">
+  <b>
+    Note that timezone is in UTC +1
+  </b>
+</p>
+
+{% else %}
+<h3 class="text-center mt-5">You have not made any orders yet!</h3>
+{% endif %}
+
+</div>
+{% endblock order-history %}
+
+{% if payments %}
+  {% block footer %}
+    {% include "book_app/includes/footer.html" %}
+  {% endblock footer %}
+{% endif %}

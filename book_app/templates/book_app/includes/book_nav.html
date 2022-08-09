@@ -1,0 +1,73 @@
+{% load static %}
+
+{% block navbar %}
+
+    <!-- header section strats -->
+    <header class="header_section">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container ">
+            <a class="navbar-brand" href="{% url 'book-home' %}">
+              <span>
+                CovertoCover
+              </span>
+            </a>
+  
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class=""> </span>
+            </button>
+  
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                  <a class="nav-link pl-lg-0" href="{% url 'book-home' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'all-books' %}">Library</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'categories' %}">Categories</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'contact-form' %}">Contact Us</a>
+                </li>
+                {% if user.id %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'shopcart' %}">
+                      {% if item_count > 0 %}
+                      <i class="fa badge fa-lg" value={{item_count}}>&#xf290;</i>
+                      {% else %}
+                      <i class="fa badge fa-lg" value=0>&#xf290;</i>
+                      {% endif %}
+                    </a>
+                  </li>
+                {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register-page' %}"> create account </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login-page' %}"> login </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'shopcart' %}">
+                      <i class="fa shopping-bag fa-lg">&#xf290;</i>
+                    </a>
+                  </li>
+                {% endif %}
+                <form class="search_form" method="GET">
+                  <input type="text" class="form-control" placeholder="Search Books" name="title">
+                  <button class="" type="submit">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                </form>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+{% endblock navbar %}
+
+
+
+      
+

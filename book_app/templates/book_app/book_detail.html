@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{book.title}}</title>
+{% endblock title %}
+
+{% block navbar %}
+{% include "book_app/includes/navbar.html" %}
+{% endblock navbar %}
+
+{% block book-detail %}
+    <div class="container-fluid"> 
+      <section class="row d-flex justify-content-center about" id="about-link">
+            <div class="col-lg-3 about-img">
+                <img src="{{ book.book_image.url }}" alt="kerry" class="">
+                <form action="{% url 'addtocart' %}" method="post">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="book_slug", value="{{ book.slug }}">
+                    <input type="number" class="" name="quantity" value="1" min="{{ book.minquantity }}" max="{{ book.quantity_instock }}" style="position: relative; top: 0.8rem;">
+                    <button type="submit" class="btn cart-btn mt-4">Add to cart</button><br>
+                </form>
+                {% if is_saved %}      
+                <div class="align-items-baseline text-nowrap">
+                    <p class="pt-4">saved for later <i class="fa fa-check-circle text-success"></i></p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6 about-text">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h2 class="fw-bold align-items-center">{{ book.title }}</h2>
+                    {% if book.is_bestselling %}  
+                    <h6 class="align-items-center text-nowrap"><i class="fa fa-certificate text-warning"></i> <i class="fa fa-check-circle-o text-primary"></i> Bestseller</h6>
+                    {% endif %}
+                </div>
+                <hr class="title-hr">
+                    <h5 class="chapter">by <span class="fw-bold">{{ book.author }}</span></h5> 
+                    <div class="d-flex justify-content-evenly auxilary-details">
+                        <h6>
+                            {% for i in rating_range %}
+                            <i class="fa fa-star"></i>
+                            {% endfor %}
+                            {% for j in missed_rating %}
+                            <i class="fa fa-star-o"></i>
+                            {% endfor %}
+                            <span class="book-rating">{{ book.rating }}/5</span>
+                        </h6>
+                        <h6><i class="fa fa-book"></i> {{ book.length }}</h6>
+                        <h6><i class="fa fa-clock-o"></i> {{ book.read_time }}</h6>
+                    </div>
+                    <div  class="d-flex justify-content-evenly auxilary-details">
+                        <h6><i class="fa fa-calendar"></i> Published on: {{ book.release_date }} </h6>
+                        <h6>ISBN: {{ book.isbn }}</h6>
+                    </div>
+                    {% if book.published_countries.all %}     
+                    <div  class="d-flex justify-content-evenly auxilary-details">
+                        <h6><i class="fa fa-globe"></i> Published in: {% for country in book.published_countries.all %}
+                            {{ country.name }}({{country.code}})
+                        {% endfor %} </h6>
+                    </div>
+                    {% endif %}
+                <hr class="title-hr">
+                <h5 class="about-writeup">
+                    <h5 class="">Description: </h5>
+                    {{ book.description }}
+                </h5>
+                <hr class="title-hr">
+                <h5 class="about-writeup">
+                    <h5 class="">Editor's note: </h5>
+                    {{ book.editors_note }}
+                </h5>
+                <hr class="title-hr">
+
+                {% if is_saved %}
+                <div class="d-flex">
+                    <div class="align-items-baseline text-nowrap">
+                        <form action="{% url 'save-book' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="book_slug" value="{{ book.slug }}">
+                            <button type="submit" class="save"><i class="fa fa-bookmark"></i> Remove from save later</button>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <form action="{% url 'save-book' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="book_slug" value="{{ book.slug }}">
+                    <button type="submit" class="save"><i class="fa fa-bookmark-o"></i> save for later</button>
+                </form>
+                {% endif %}
+
+                {% if book.category.all %}   
+                    <legend class="mt-5 mb-3">Categories related to this book</legend>
+                    {% for category in book.category.all %}
+                    <a href="{% url 'category-page' category.title %}"><button>{{ category.title }}</button></a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            {% if related_books %}
+            <legend class="text-center mt-5">Other books by the author</legend>
+            <div id="wrapper" class="mb-5 mt-3">
+                <div id="flexContainer">
+                {% for book in related_books %}           
+                    <div class="flexItems mt-4">
+                      <div class="bookImage"><img src="{{ book.book_image.url }}" alt=""></div>
+                      <div class="description ">
+                        <h3 class="book-title-h3"><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h3>
+                        <h3 class="book-author-h3"><a href="{% url 'author-page' book.author.first_name book.author.last_name book.author.id %}">{{ book.author }}</a></h3>
+                        <div class="d-flex justify-content-between align-items-baseline fs-sm-6 group-rating">
+                          <h6 class="d-flex mt-3 p-0 star-rating">
+                            {% if book.rating == 1 %}     
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            {% elif book.rating == 2 %}
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            {% elif book.rating == 3 %}
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            {% elif book.rating == 4 %}
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            {% else %}
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            {% endif %}
+                        </h6>
+                      </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+              </div>
+            {% endif %}
+      </section>
+    </div>
+
+    
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-6 col-md-12 col-sm-12">
+
+            <h1 class="comments-title">Reviews ({{ reviews.count }})</h1>
+            <div class="d-flex">
+            <div class="row comments-section">
+                {% for review in reviews %}
+                <div class="col-md-8">
+                    <div class="media g-mb-30 media-comment d-flex">
+                        <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                          <div class="g-mb-15 d-flex">
+                            <div class="be-img-comment align-items-baseline">	
+                                <h1>{{ review.fullname.0 | title }}</h1>
+                            </div>
+                            <div class="align-items-center"> 
+                                <h5 class="h5 g-color-gray-dark-v1 mb-0">{{ review.fullname }}</h5>
+                                <span class="g-color-gray-dark-v4 g-font-size-12"></span>
+                            </div>
+                          </div>
+                    
+                          <p>{{ review.review_message | linebreaks }}</p>
+        
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-12 col-sm-12">
+        <form class="form-block mt-5" method="POST" id="comment-form">
+            {% csrf_token %}
+            <div class="row" mt-3>
+                <div class="col-12 p-3 mb-4 ">
+                    <legend>Please leave a review about this book:</legend>
+                    {% for field in review_form %}
+                    <div class="form-group fl_icon {% if field.errors %} errors {% endif %}">
+                        {{ field }} 
+                        {{ field.errors }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <button class="btn btn-primary mb-5" type="submit">submit</button>
+        </form>
+    </div>
+    </div>
+</div>
+    
+{% endblock book-detail %}
+
+{% block footer %}
+  {% include "book_app/includes/footer.html" %}
+{% endblock footer %}

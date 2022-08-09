@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}
+  <title>Saved Books</title>
+{% endblock title %}
+
+{% block navbar %}
+  {% include "book_app/includes/book_nav.html" %}
+{% endblock navbar %}
+
+{% block book-list %}
+
+{% if saved_books %}
+  
+  <section class="container-fluid">
+    <div class="heading_container heading_center mt-5">
+      <h2>
+        Saved Books
+      </h2>
+    </div>
+    <div id="wrapper">
+      <div id="flexContainer">
+      {% for book in saved_books %}           
+          <div class="flexItems">
+            <div class="bookImage"><img src="{{ book.books.book_image.url }}" alt=""></div>
+            <div class="description">
+              <h3 class="book-title-h3"><a href="{{ book.books.get_absolute_url }}">{{ book.books.title }}</a></h3>
+              <h3 class="book-author-h3"><a href="{% url 'author-page' book.books.author.first_name book.books.author.last_name book.books.author.id %}">{{ book.books.author }}</a></h3>
+              <div class="d-flex justify-content-between align-items-baseline group-rating">
+                <h6 class="d-flex mt-3 p-0 star-rating">
+                  {% if book.rating == 1 %}     
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  {% elif book.rating == 2 %}
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  {% elif book.rating == 3 %}
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  {% elif book.rating == 4 %}
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-o"></i>
+                  {% else %}
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  {% endif %}
+                </h6>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+    </div>
+  </section>
+{% else %}
+<h3 class="text-center mt-5">You have no saved books yet!</h3>
+{% endif %}
+{% endblock book-list %}
+
+{% block footer %}
+  {% include "book_app/includes/footer.html" %}
+{% endblock footer %}
+
+

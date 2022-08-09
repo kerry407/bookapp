@@ -1,0 +1,63 @@
+
+
+{% block book-list %}
+    <section class="container mt-5">
+        <div class="heading_container heading_center">
+            <h2>
+              Latest Books
+            </h2>
+            <p>
+              Catch a thrill on all our new collections.
+            </p>
+          </div>
+          <div id="wrapper">
+            <div id="flexContainer">
+            {% for book in latest_books %}           
+                <div class="flexItems">
+                  <div class="bookImage"><img src="{{ book.book_image.url }}" alt=""></div>
+                  <div class="description">
+                    <h3 class="book-title-h3"><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h3>
+                    <h3 class="book-author-h3"><a href="{% url 'author-page' book.author.first_name book.author.last_name book.author.id %}">{{ book.author }}</a></h3>
+                    <div class="d-flex justify-content-between align-items-baseline group-rating">
+                      <h6 class="d-flex mt-3 p-0 star-rating">
+                        {% if book.rating == 1 %}     
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                        {% elif book.rating == 2 %}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                        {% elif book.rating == 3 %}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                        {% elif book.rating == 4 %}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                        {% else %}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        {% endif %}
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+          </div>
+    </section>
+{% endblock book-list %}
+

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Login</title>
+{% endblock title %}
+
+{% block navbar %}
+{% include "book_app/includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block login-page %}
+  
+<div class="wrapper-login">
+  <form method="post" class="form-signin">  
+    {% csrf_token %}     
+    <h2 class="form-signin-heading">Please login</h2>
+    <input type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="" />
+    <input type="password" class="form-control" name="password" placeholder="Password" required=""/>      
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button> 
+    <div class="mt-2 text-center">
+      <span class="">New to Bostorek?  <a href="{% url 'register-page' %}"> Sign Up</a></span>
+    </div>  
+  </form>
+</div>
+
+{% endblock login-page %}

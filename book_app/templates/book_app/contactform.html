@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} <title>Contact Us</title> {% endblock title %}
+
+{% block navbar %}
+  {% include "book_app/includes/navbar.html" %}
+{% endblock navbar %}
+
+{% block contact %}  
+
+    <section class="about_section layout_padding">
+        <div class="container ">
+            <div class="row">
+            <div class="col-md-6">
+                <div class="img-box">
+                <img src="{% static 'images/about-img.png' %}" alt="">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="detail-box">
+                <div class="heading_container">
+                    <h2>
+                    About Our Bookstore
+                    </h2>
+                </div>
+                <p>
+                    {{ about.about_text }}
+                </p>
+                <!-- <a href="">
+                    Read More
+                </a> -->
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact_section layout_padding mt-5">
+        <div class="container">
+        <div class="row">
+            <div class="col-md-6 ">
+                <div class="heading_container ">
+                    <h2 class="">
+                    Contact Us
+                    </h2>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}   
+                        <div class="multi-form {% if field.errors %} errors {% endif %}">
+                            {{ field }} 
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
+                    <button type="submit">
+                        SUBMIT
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <div class="img-box">
+                    <img src="{% static 'images/contact-img.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </section>
+
+{% endblock contact %}
+
+{% block footer %}
+  {% include "book_app/includes/footer.html" %}
+{% endblock footer %}
