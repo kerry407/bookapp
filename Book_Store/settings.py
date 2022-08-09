@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
-import django_heroku
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +27,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True 
 
-ALLOWED_HOSTS = ["covertocoverapp.herokuapp.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["covertocover-app.herokuapp.com", "127.0.0.1"]
 
 
 # Application definition
@@ -89,9 +89,9 @@ DATABASES = {
     }
 }
 
-# import dj_database_url
-# db_from_env = dj_database_url.config(conn_max_age=600)
-# DATABASES['default'].update(db_from_env)
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
