@@ -49,7 +49,7 @@
                         <h6><i class="fa fa-clock-o"></i> {{ book.read_time }}</h6>
                     </div>
                     <div  class="d-flex justify-content-evenly auxilary-details">
-                        <h6><i class="fa fa-calendar"></i> Published on: {{ book.release_date }} </h6>
+                        <h6><i class="fa fa-calendar"></i> Published on: {{ book.release_date | date:"F j, o" }} </h6>
                         <h6>ISBN: {{ book.isbn }}</h6>
                     </div>
                     {% if book.published_countries.all %}     
@@ -163,17 +163,20 @@
                     <div class="media g-mb-30 media-comment d-flex">
                         <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
                           <div class="g-mb-15 d-flex">
-                            <div class="be-img-comment align-items-baseline">	
+                            <div class="be-img-comment align-items-baseline me-5">	
                                 <h1>{{ review.fullname.0 | title }}</h1>
                             </div>
                             <div class="align-items-center"> 
-                                <h5 class="h5 g-color-gray-dark-v1 mb-0">{{ review.fullname }}</h5>
+                                <h5 class="h5 g-color-gray-dark-v1 mb-0"><b>{{ review.fullname }}</b></h5>
                                 <span class="g-color-gray-dark-v4 g-font-size-12"></span>
                             </div>
+                            
                           </div>
                     
                           <p>{{ review.review_message | linebreaks }}</p>
-        
+                          <div>
+                            Jan
+                          </div>
                         </div>
                     </div>
                 </div>

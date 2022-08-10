@@ -107,6 +107,7 @@ class Review(models.Model):
                                 MaxValueValidator(5)
                                 ])
     book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, related_name="books")
+    date_created = models.DateTimeField(auto_now=True, null=True, blank=True)
     
     def __str__(self):
         return f"A review was sent by {self.fullname}"
