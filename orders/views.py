@@ -151,7 +151,7 @@ def paystack_payment(request):
     autogen_ref = ''.join(random.choices((string.digits + string.ascii_letters), k=12))
     profile = Userprofile.objects.get(user__username=request.user.username)
     total_amount = float(request.POST.get('total')) * 100 * 600
-    callback_url = "covertocover-app.herokuapp.com/orders/ordercompleted/"
+    callback_url = "https://covertocover-app.herokuapp.com/orders/ordercompleted/"
     
     headers = {
         'Authorization': f"Bearer {api_key}"
@@ -159,7 +159,7 @@ def paystack_payment(request):
     
     order_data = {
         'email': profile.user.email,
-        'amount': int(total_amount),
+        'amount': total_amount,
         'ref': autogen_ref,
         'callback_url': callback_url,
         'order_number': ordercode
