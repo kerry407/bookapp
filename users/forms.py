@@ -59,7 +59,7 @@ class UserprofileForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
             
         try:
-            Userprofile.objects.exclude(pk=self.instance.pk).get(email=email)
+            User.objects.exclude(pk=self.instance.pk).get(email=email)
         except User.DoesNotExist:
             return email
         raise forms.ValidationError(f'Email {email} is already in use')
