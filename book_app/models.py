@@ -79,7 +79,7 @@ class Book(models.Model):
     editors_note = models.TextField(null=True, blank=True)
     category = models.ManyToManyField(Category, blank=True)
     isbn = models.CharField(max_length=100, null=True)
-    slug = models.SlugField(default='', null=False, db_index=True, editable=False)
+    slug = models.SlugField(default='', null=False, db_index=True, editable=False, max_length=255)
     book_image = models.ImageField(upload_to='images', default='static/images/about-img.png')
     price = models.FloatField(null=True, blank=True)
     available = models.CharField(max_length=30,blank=True, null=True, choices=AVAILABLE)
