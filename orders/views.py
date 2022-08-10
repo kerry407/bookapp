@@ -185,7 +185,6 @@ def paystack_payment(request):
         order.order_code = ordercode      
         order.order_placed = True 
         order.total = total_amount/(100 * 600)
-        order.status = order.STATUS[2]
         order.save()
         return redirect(rd_url)
     return redirect('checkout')

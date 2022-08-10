@@ -48,7 +48,7 @@ class Payment(models.Model):
     address = models.CharField(max_length=150, blank=True)
     city = models.CharField(blank=True, max_length=20)
     country = CountryField(blank_label='select country', null=True)
-    status = models.CharField(max_length=10, choices=STATUS, default='New')
+    status = models.CharField(max_length=20, choices=STATUS, default='New')
     adminnote = models.CharField(blank=True, max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
