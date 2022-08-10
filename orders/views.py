@@ -74,7 +74,7 @@ def shopcart(request):
     
     context = {
         'cart': cart,
-        'subtotal': SUBTOTAL,
+        'subtotal': float(SUBTOTAL),
         'vat': VAT,
         'shipping_fee': SHIPPING_FEE,
         'total': TOTAL
@@ -130,7 +130,7 @@ def checkout(request):
     
     context = {
         'cart': cart,
-        'subtotal': SUBTOTAL,
+        'subtotal': float(SUBTOTAL),
         'vat': VAT,
         'shipping_fee': SHIPPING_FEE,
         'total': TOTAL,
