@@ -8,7 +8,7 @@ class ShopCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
-    order_code = models.CharField(max_length=30)
+    order_code = models.CharField(max_length=100)
     order_placed = models.BooleanField() 
     
     def __str__(self):
