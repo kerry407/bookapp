@@ -17,7 +17,7 @@ class ShopCart(models.Model):
     @property 
     def amount(self):
         if self.book.id is not None:
-            return int(self.quantity * self.book.price)
+            return float(self.quantity * self.book.price)
         else:
             return None 
         
