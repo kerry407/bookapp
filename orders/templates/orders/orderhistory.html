@@ -36,7 +36,7 @@
 <tbody>
 <tr class="rounded bg-white">
 <th scope="row" class="order-color">{{ payment.payment_code }}</th>
-<td>{{ payment.created_at }}</td>
+<td>{{ payment.created_at | date:"F j, o" }}</td>
 <td>
     <div class="dropdown">
 <button class="btn btn-warning btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
@@ -55,7 +55,7 @@ Pending
 {{ payment.country.name }}
 </div>
 </td>
-<td>{{ payment.updated_at }}</td>
+<td>{{ payment.updated_at | date:"F j, o" }}</td>
 <td class="d-flex align-items-center">
 <span class="ml-2">{{ payment.address }}, {{ payment.city}}.</span>
 </td>
