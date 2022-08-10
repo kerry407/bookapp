@@ -77,7 +77,7 @@ def shopcart(request):
         'subtotal': SUBTOTAL,
         'vat': round(VAT, 2),
         'shipping_fee': round(SHIPPING_FEE, 2),
-        'total': TOTAL
+        'total': round(TOTAL, 2)
     }
      
     return render(request, "orders/shopcart.html", context)
@@ -133,7 +133,7 @@ def checkout(request):
         'subtotal': SUBTOTAL,
         'vat': round(VAT, 2),
         'shipping_fee': round(SHIPPING_FEE, 2),
-        'total': TOTAL,
+        'total': round(TOTAL, 2),
         'naira_total': convert_to_naira(TOTAL),
         'get_profile': get_profile,
         'order_code': order_code 
