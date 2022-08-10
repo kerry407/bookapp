@@ -65,19 +65,19 @@ def shopcart(request):
         SUBTOTAL += item.book.price * item.quantity
     
     if SUBTOTAL > 100:
-        SHIPPING_FEE = 0.08 * SUBTOTAL
+        SHIPPING_FEE = round(0.08 * SUBTOTAL, 2)
     else:
         SHIPPING_FEE = 0
         
-    VAT = 0.075 * SUBTOTAL
+    VAT = round(0.075 * SUBTOTAL, 2)
     TOTAL = SUBTOTAL + SHIPPING_FEE + VAT
     
     context = {
         'cart': cart,
         'subtotal': SUBTOTAL,
-        'vat': round(VAT, 2),
-        'shipping_fee': round(SHIPPING_FEE, 2),
-        'total': round(TOTAL, 2)
+        'vat': VAT,
+        'shipping_fee': SHIPPING_FEE,
+        'total': TOTAL
     }
      
     return render(request, "orders/shopcart.html", context)
