@@ -16,7 +16,7 @@ from django.core.paginator import Paginator
 
 def homepage(request):
     """
-        This page contains the latest books in the store. 
+        This view contains the latest books in the store. 
         Therefore, it contains logic for accessing the latest books 
         from the database and then to the templates.
     """
@@ -33,66 +33,28 @@ def homepage(request):
     
     return render(request, 'book_app/index.html', context)
 
-# def all_books(request):
-    
-#     books = Book.objects.all().order_by('-rating')
-#     book_count = books.count()
-#     average_rating = books.aggregate(Avg('rating'))
-#     rating = average_rating['rating__avg'] # You can pass different methods to the aggregation methods.
-    
-    
-#     context = {
-#         'books': books,
-#         'book_count': book_count,
-#         'average_rating': rating,
-#     }
-    
-#     return render(request, 'book_app/all_books.html', context)
 
-class BookListView(ListView):
-    model = Book
-    template_name = "book_app/all_books.html"
-    paginate_by = 4
+def all_books(request):
+    
+    books = Book.objects.all().order_by('-rating')
+    book_count = books.count()
+    book_filter = BookFilters(request.GET, queryset=books)
+    books = book_filter.qs 
+    paginator = Paginator(books, 4)
+    page = request.GET.get('page')
+    paged_object = paginator.get_page(page)
     
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        books = Book.objects.all()  
-        book_filter = BookFilters(self.request.GET, queryset=books)
-        books = book_filter.qs 
-        book_count = books.count()
-        average_rating = books.aggregate(Avg('rating'))
-        rating = average_rating['rating__avg']
-        context["book_count"] = book_count
-        context["average_rating"] = rating 
-        context["book-filter"] = book_filter
-        context['books'] = books 
-        
-        return context
+    context = {
+        'book_count': book_count,
+        'book_filter': book_filter,
+        'books': paged_object,
+        'page': page,
+    }
     
-    def get_queryset(self):
-        order = super().get_queryset()
-        ordering = order.order_by("-rating")
-        
-        return ordering
-    
-# def book_details(request, slug):
-#     """
-#     This view is for the book details page, using the get() method we can 
-#     query data for each particular book from the database. We have the option 
-#     of trying to get the data and handle the url exception by raising Http40    4()
-#     or by just usng the get_object_or_404() method to simply do the same thing
-     
-#     """
-    
-#     # try:
-#     #     book_item = Book.objects.get(title=title)
-#     # except Exception:
-#     #     raise Http404()
-    
-#     book_item = get_object_or_404(Book, slug=slug)
-    
-#     return render(request, 'book_app/book_detail.html', {'book': book_item})
+    return render(request, 'book_app/all_books.html', context)
+
+
 
 
 def book_details(request, slug):
@@ -133,31 +95,21 @@ def book_details(request, slug):
     return  render(request, 'book_app/book_detail.html', context)
     
 
-def thankyoupage(request):
-    return render(request, "book_app/thankyou.html")
 
 def author_page(request, firstname, lastname, pk):
     specific_author = Author.objects.get(first_name=firstname, last_name=lastname, id=pk)
     books_by_author = specific_author.books.filter()
-    # books_by_author = Book.objects.filter(author__first_name=firstname, author_id=id)
-    book_count = books_by_author.count()
-    average_rating = books_by_author.aggregate(Avg('rating'))
-    rating = average_rating["rating__avg"]
     book_filter = BookFilters(request.GET, queryset=books_by_author)
     books_by_author = book_filter.qs 
-
-    paginator = Paginator(books_by_author, 1)
+    paginator = Paginator(books_by_author, 4)
     page = request.GET.get('page')
     paged_category = paginator.get_page(page)
     
     context = {
-        'books_by_author': books_by_author,
-        'book_count': book_count,
-        'average_rating': rating,
         'specific_author': specific_author,
         'book_filter': book_filter,
         'page': page,
-        'paged_category': paged_category,
+        'books_by_author': paged_category,
     }
     
     return render(request, 'book_app/author.html', context)
@@ -185,41 +137,6 @@ class CategoryListView(ListView):
     template_name = "book_app/categories.html"
     context_object_name = "category_list"    
  
-    
-# class SaveBookView(LoginRequiredMixin, View):
-#     login_url = 'login-page'
-    
-#     def get(self, request):
-#         saved_book = request.session.get('save_for_later_book')
-        
-#         if saved_book is None or len(saved_book) == 0:
-#             books = []
-#         else:
-#             books = Book.objects.filter(slug__in=saved_book)
-            
-#         context = {
-#             'books': books
-#         }
-        
-#         return render(request, 'book_app/saved_book.html', context)
-                
-#     def post(self, request):
-#         book_slug = request.POST.get('book_slug')
-        
-#         if not request.session.has_key("save_for_later_book") or not request.session["save_for_later_book"]:
-#             request.session["save_for_later_book"] = [book_slug]
-#         else:
-#             saved_book = request.session["save_for_later_book"]
-            
-#             if book_slug not in saved_book:
-#                 saved_book.append(book_slug)
-#             else:
-#                 saved_book.remove(book_slug)
-                
-#             request.session["save_for_later_book"] = saved_book
-            
-#         return redirect('book-detail', slug=book_slug)
-
 
 class AddToSavedBooksView(LoginRequiredMixin ,View):
     login_url = 'login-page'

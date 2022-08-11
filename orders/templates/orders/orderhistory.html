@@ -72,12 +72,13 @@ Pending
 {% else %}
 <h3 class="text-center mt-5">You have not made any orders yet!</h3>
 {% endif %}
-
 </div>
-{% endblock order-history %}
 
 {% if payments %}
-  {% block footer %}
-    {% include "book_app/includes/footer.html" %}
-  {% endblock footer %}
+  {% include "book_app/includes/footer.html" %}
 {% endif %}
+{% endblock order-history %}
+
+
+
+

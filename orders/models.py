@@ -13,7 +13,7 @@ class ShopCart(models.Model):
     
     def __str__(self):
         return f"{self.book.title} added by {self.user.username}"
-    
+    # property that will be called in the template 
     @property 
     def amount(self):
         if self.book.id is not None:

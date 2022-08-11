@@ -90,15 +90,9 @@ def userprofile_update(request):
 @login_required(login_url='login-page')
 def userprofile(request):
     profile = Userprofile.objects.get(user__username=request.user.username)
-    payments = Payment.objects.filter(user__username=request.user.username, order_placed=True).order_by('-id')
-    reference_array = [item.order_code for item in payments]
-    
-    cart = ShopCart.objects.filter(user__username=request.user.username, order_code__in=reference_array, order_placed=True)
     
     context = {
         'userprofile': profile,
-        'payments': payments,
-        'cart': cart,
     }
     return render(request, 'users/userprofile.html', context)
     

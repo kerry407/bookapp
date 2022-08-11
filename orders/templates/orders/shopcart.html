@@ -75,10 +75,13 @@
     <h3 class="text-center mt-5">No items in your cart</h3>
 {% endif %}
 
+{% if cart %}
+{% include "book_app/includes/footer.html" %}
+{% endif %}
 
 {% endblock shopcart %}
 
-{% block footer %}
-  {% include "book_app/includes/footer.html" %}
-{% endblock footer %}
+
+  
+
 

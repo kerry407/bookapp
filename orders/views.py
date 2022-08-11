@@ -20,16 +20,16 @@ def addtoshopcart(request):
     book_slug = request.POST["book_slug"]
     thequantity = request.POST.get("quantity")
     book_item = Book.objects.get(slug=book_slug)
-
+    # Existing item in cart
     cart = ShopCart.objects.filter(user__username=request.user.username, book= book_item, order_placed=False)
     
-    if cart:
+    if cart: # Check if an item ealready exists
         book_check = ShopCart.objects.filter(user=request.user, book=book_item, order_placed=False).first()
-        
+        # if the item exists, increase the quantity 
         if book_check:
             book_check.quantity += int(thequantity)
             book_check.save()
-        
+        # Create a new item if the item doesn't exist
         else:
             book_cart = ShopCart()
             book_cart.quantity = thequantity
@@ -38,7 +38,7 @@ def addtoshopcart(request):
             book_cart.order_placed = False 
             book_cart.order_code = cart[0].order_code 
             book_cart.save()
-            
+    # If no existing cart, create a new cart object, that will be added  
     else:
         ordercode = str(uuid.uuid4())
         new_cart = ShopCart()
@@ -63,13 +63,14 @@ def shopcart(request):
     
     for item in cart:
         SUBTOTAL += item.book.price * item.quantity
-    
+        
+    # shipping fee is 8% of subtotal if subtotal is greater than $100
     if SUBTOTAL > 100:
         SHIPPING_FEE = round(0.08 * SUBTOTAL, 2)
     else:
         SHIPPING_FEE = 0
         
-    VAT = round(0.075 * SUBTOTAL, 2)
+    VAT = round(0.075 * SUBTOTAL, 2) #VAT is 7.5% of subtotal
     TOTAL = SUBTOTAL + SHIPPING_FEE + VAT
     
     context = {
@@ -120,12 +121,13 @@ def checkout(request):
         SUBTOTAL += item.book.price * item.quantity
         order_code = item.order_code
         
+    # shipping fee is 8% of subtotal if subtotal is greater than $100
     if SUBTOTAL > 100:
         SHIPPING_FEE = round(0.08 * SUBTOTAL, 2)
     else:
         SHIPPING_FEE = 0
-        
-    VAT = round(0.075 * SUBTOTAL, 2)
+    
+    VAT = round(0.075 * SUBTOTAL, 2) # VAT is 7.5% of subtotal
     TOTAL = SUBTOTAL + SHIPPING_FEE + VAT
     
     context = {
@@ -148,7 +150,7 @@ def paystack_payment(request):
     url = 'https://api.paystack.co/transaction/initialize'
     api_key = settings.API_KEY
     ordercode = request.POST.get('ordernumber')
-    autogen_ref = ''.join(random.choices((string.digits + string.ascii_letters), k=12))
+    autogen_ref = ''.join(random.choices((string.digits + string.ascii_letters), k=12)) # Create the reference id
     profile = Userprofile.objects.get(user__username=request.user.username)
     total_amount = float(request.POST.get('total')) * 100 * 600
     callback_url = "https://covertocover-app.herokuapp.com/orders/ordercompleted/"
@@ -178,7 +180,7 @@ def paystack_payment(request):
         order.first_name = profile.user.first_name   
         order.last_name = profile.user.last_name
         order.phone = profile.phone1
-        order.payment_code = autogen_ref
+        order.payment_code = transback["data"]["reference"]
         order.address = profile.address
         order.city = profile.city
         order.country = profile.country
@@ -186,6 +188,7 @@ def paystack_payment(request):
         order.order_placed = True 
         order.total = total_amount/(100 * 600)
         order.save()
+        # After saving order details, return to the order-confirmed url
         return redirect(rd_url)
     return redirect('checkout')
         
@@ -199,6 +202,7 @@ def order_completed(request):
         item.order_placed = True 
         item.save()
         
+        # return the cart quantity to zero after completed order
         book = Book.objects.get(id=item.book.id)
         book.quantity_instock -= item.quantity 
         
@@ -210,6 +214,7 @@ def order_completed(request):
     }
     
     return render(request, 'orders/orderplaced.html', context)
+        
         
 def order_history(request):
     payments = Payment.objects.filter(user__username=request.user.username, order_placed=True).order_by('-id')

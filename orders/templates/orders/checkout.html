@@ -156,8 +156,12 @@
         </div>        
     </div>
 </div>
+
+{% if cart %}
+    {% include "book_app/includes/footer.html" %}
+{% endif %}
 {% endblock checkout %}
 
-{% block footer %}
-  {% include "book_app/includes/footer.html" %}
-{% endblock footer %}
+
+
+
