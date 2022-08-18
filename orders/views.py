@@ -11,9 +11,11 @@ import requests
 from django.contrib import messages 
 import json 
 from django.conf import settings 
+from users.decorators import unauthenticated_user
 
 # Create your views here.
 
+@unauthenticated_user
 @require_POST
 @login_required(login_url="login-page")
 def addtoshopcart(request):
@@ -83,6 +85,8 @@ def shopcart(request):
      
     return render(request, "orders/shopcart.html", context)
 
+
+@unauthenticated_user
 @require_POST
 @login_required(login_url="login-page")
 def update_item_quantity(request, pk):
@@ -95,7 +99,8 @@ def update_item_quantity(request, pk):
     messages.success(request, 'Item quantity successfully updated')
     return redirect("shopcart")
     
-    
+
+@unauthenticated_user
 @login_required(login_url="login-page")
 def deletefromcart(request, pk):
     url = request.META.get('HTTP_REFERER')
@@ -107,7 +112,8 @@ def deletefromcart(request, pk):
 def convert_to_naira(amount):
     return amount * 600
         
-         
+        
+@unauthenticated_user        
 def checkout(request):
     cart = ShopCart.objects.filter(user=request.user, order_placed=False)
     get_profile = Userprofile.objects.get(user__username=request.user.username)
@@ -144,6 +150,7 @@ def checkout(request):
     return render(request, 'orders/checkout.html', context)
 
 
+@unauthenticated_user
 @require_POST
 @login_required(login_url='login-page') 
 def paystack_payment(request):
@@ -192,7 +199,8 @@ def paystack_payment(request):
         return redirect(rd_url)
     return redirect('checkout')
         
-        
+
+@unauthenticated_user      
 @login_required(login_url='login-page')    
 def order_completed(request):
     cart = ShopCart.objects.filter(user__username=request.user.username)
