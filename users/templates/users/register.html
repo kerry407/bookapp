@@ -25,8 +25,6 @@
 
                 <form class="mx-1 mx-md-4" method="post">
                   {% csrf_token %}
-
-                 
                   <div class="d-flex flex-row align-items-baseline mb-4">
                     <i class="fa fa-user fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0 {% if register_form.username.errors %} errors {% endif %}">

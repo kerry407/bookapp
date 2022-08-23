@@ -19,12 +19,6 @@ class RegisterForm(UserCreationForm):
             },
         }
         
-        widgets = {
-            "username": forms.TextInput(attrs={'class': 'form-input', 'placeholder':'Username'}),
-            "email": forms.EmailInput(attrs={'class': 'form-input', 'placeholder':'Email Address'}),
-            "password1": forms.PasswordInput(attrs={'class': 'form-input', 'placeholder':'Password'}),
-            "password2": forms.PasswordInput(attrs={'class': 'form-input', 'placeholder':'Confirm Password'}),
-        }
         
     def clean_username(self):
         username = self.cleaned_data.get('username')   

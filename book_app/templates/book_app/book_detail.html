@@ -16,7 +16,7 @@
                 <form action="{% url 'addtocart' %}" method="post">
                     {% csrf_token %}
 
-                    <input type="hidden" name="book_slug", value="{{ book.slug }}">
+                    <input type="hidden" name="book_slug" value="{{ book.slug }}">
                     <input type="number" class="" name="quantity" value="1" min="{{ book.minquantity }}" max="{{ book.quantity_instock }}" style="position: relative; top: 0.8rem;">
                     <button type="submit" class="btn cart-btn mt-4">Add to cart</button><br>
                 </form>
