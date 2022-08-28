@@ -13,7 +13,10 @@
       <section class="row d-flex justify-content-center about" id="about-link">
             <div class="col-lg-3 about-img">
                 <img src="{{ book.book_image.url }}" alt="kerry" class="">
-                <form action="{% url 'addtocart' %}" method="post">
+                <div>
+                    <h2 class="text-success text-center mt-3">${{ book.price }}</h2>
+                </div>
+                <form action="{% url 'addtocart' %}" method="post" class="text-center">
                     {% csrf_token %}
 
                     <input type="hidden" name="book_slug" value="{{ book.slug }}">

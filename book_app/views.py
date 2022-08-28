@@ -141,9 +141,7 @@ class CategoryListView(ListView):
 class AddToSavedBooksView(LoginRequiredMixin ,View):
     login_url = 'login-page'
     
-    
     def get(self, request):
-        
         saved_books = SavedBookModel.objects.filter(owner=request.user)
         paginator = Paginator(saved_books, 4)
         page = request.GET.get('page')

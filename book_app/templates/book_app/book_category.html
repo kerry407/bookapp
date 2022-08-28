@@ -5,7 +5,7 @@
 {% endblock title %}
 
 {% block navbar %}
-  {% include "book_app/includes/book_nav.html" %}
+  {% include "book_app/includes/navbar.html" %}
 {% endblock navbar %}
 
 {% block book-list %}
@@ -71,5 +71,7 @@
 {% endblock book-list %}
   
 {% block footer %}
+{% if books_by_category %}
 {% include "book_app/includes/footer.html" %}
+{% endif %}
 {% endblock footer %}
