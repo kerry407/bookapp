@@ -34,7 +34,7 @@
               <div class="description ">
                 <h3 class="book-title-h3"><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h3>
                 <h3 class="book-author-h3"><a href="{% url 'author-page' book.author.first_name book.author.last_name book.author.id %}">{{ book.author }}</a></h3>
-                <div class="d-flex justify-content-between align-items-baseline fs-sm-6 group-rating">
+                <!-- <div class="d-flex justify-content-between align-items-baseline fs-sm-6 group-rating">
                   <h6 class="d-flex mt-3 p-0 star-rating">
                     {% if book.rating == 1 %}     
                     <i class="fa fa-star"></i>
@@ -68,7 +68,7 @@
                     <i class="fa fa-star"></i>
                     {% endif %}
                 </h6>
-              </div>
+              </div> -->
               </div>
             </div>
         {% endfor %}

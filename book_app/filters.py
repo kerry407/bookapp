@@ -11,9 +11,12 @@ class BookFilters(django_filters.FilterSet):
         fields = ['search_obj']
         
     def custom_filter(self, queryset, name, value):
-        
-        return Book.objects.filter(
-                                Q(title__icontains=value) | Q(author__first_name__icontains=value) | Q(author__last_name__icontains=value)
-                            ) 
+        queryset = Book.objects.filter(
+                                        Q(title__icontains=value) | 
+                                        Q(author__first_name__icontains=value) | 
+                                        Q(author__last_name__icontains=value)  |
+                                        Q(category__title__icontains=value)
+                            )
+        return queryset
         
         

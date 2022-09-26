@@ -39,7 +39,7 @@ def all_books(request):
     books = Book.objects.all().order_by('-rating')
     book_count = books.count()
     book_filter = BookFilters(request.GET, queryset=books)
-    books = book_filter.qs 
+    filtered_books = book_filter.qs 
     paginator = Paginator(books, 4)
     page = request.GET.get('page')
     paged_object = paginator.get_page(page)
@@ -47,9 +47,10 @@ def all_books(request):
     
     context = {
         'book_count': book_count,
-        'book_filter': book_filter,
+        # 'book_filter': book_filter,
         'books': paged_object,
         'page': page,
+        'books': filtered_books,
     }
     
     return render(request, 'book_app/all_books.html', context)

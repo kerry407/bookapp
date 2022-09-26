@@ -1,3 +1,4 @@
+import email
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User 
 from users.models import Userprofile
@@ -18,10 +19,12 @@ def register_user(request):
         
         if register_form.is_valid():
             register_form.save()
-            email = register_form.cleaned_data.get('email')
-            messages.success(request,  f'Account for {email} has been created')
-            
-            return redirect('login-page')
+            username = register_form.cleaned_data.get('username')
+            password = register_form.cleaned_data.get('password1')
+            user = authenticate(request, username=username, password=password)
+            login(request, user)
+            messages.success(request, f"Account created successfully")
+            return redirect('book-home')
         else:
             messages.error(request, register_form.errors)
     else:
@@ -37,7 +40,10 @@ def register_user(request):
 @unauthenticated_user
 def login_func(request):
     if request.method == "POST":
-        username = request.POST.get('username')
+        email = request.POST.get('email')
+        request_user = User.objects.get(email=email)
+        username = request_user.username 
+        # username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         
