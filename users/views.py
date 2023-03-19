@@ -40,19 +40,23 @@ def register_user(request):
 @unauthenticated_user
 def login_func(request):
     if request.method == "POST":
-        email = request.POST.get('email')
-        request_user = User.objects.get(email=email)
-        username = request_user.username 
-        # username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
         
-        if user:
-            login(request, user)
-            
-            return redirect('book-home')
+        try:
+            email = request.POST.get('email')
+            request_user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(request, f"No user with the email")
         else:
-            messages.error(request, 'Username or password is not correct')
+            username = request_user.username 
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+        
+            if user:
+                login(request, user)
+                
+                return redirect('book-home')
+            else:
+                messages.error(request, 'Username or password is not correct')
     
     return render(request, 'users/login.html')
 

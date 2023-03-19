@@ -34,11 +34,12 @@ class Author(models.Model):
     address = models.OneToOneField(Address, on_delete=models.CASCADE, null=True)
     about = models.TextField(null=True)
     
+    @property
     def get_fullname(self):
         return f"{self.first_name} {self.last_name}"
     
     def __str__(self):
-        return self.get_fullname()
+        return self.get_fullname
     
 class Category(models.Model):
     title = models.CharField(max_length=30)

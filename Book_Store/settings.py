@@ -27,7 +27,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["covertocover-app.herokuapp.com", "127.0.0.1"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -88,10 +89,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -144,32 +141,35 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 API_KEY =  config("API_KEY")
 
 # AWS SETTINGS
-AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_REGION_NAME = "us-east-1"
-AWS_ACCESS_KEY_ID =  config("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY =  config("AWS_SECRET_ACCESS_KEY")
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-AWS_LOCATION = "static"
+# AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+# AWS_S3_REGION_NAME = "us-east-1"
+# AWS_ACCESS_KEY_ID =  config("AWS_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY =  config("AWS_SECRET_ACCESS_KEY")
+# AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+# AWS_LOCATION = "static"
 
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
+# AWS_S3_OBJECT_PARAMETERS = {
+#     'CacheControl': 'max-age=86400',
+# }
 
-DEFAULT_FILE_STORAGE = 'custom_storages.MediaFileStorage'
-STATICFILES_STORAGE = 'custom_storages.StaticFileStorage' 
+# DEFAULT_FILE_STORAGE = 'custom_storages.MediaFileStorage'
+# STATICFILES_STORAGE = 'custom_storages.StaticFileStorage' 
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
-]
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_URL = "/media/"
 
-STATIC_URL = "https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
 
-MEDIA_URL = "https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 
-STATICFILES_FOLDER = "static"
+# MEDIA_URL = "https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 
-MEDIAFILES_FOLDER = "uploads"
+# STATICFILES_FOLDER = "static"
+
+# MEDIAFILES_FOLDER = "uploads"
 
 # django_heroku.settings(locals())

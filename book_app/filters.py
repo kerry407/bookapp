@@ -16,7 +16,7 @@ class BookFilters(django_filters.FilterSet):
                                         Q(author__first_name__icontains=value) | 
                                         Q(author__last_name__icontains=value)  |
                                         Q(category__title__icontains=value)
-                            )
+                            ).distinct()
         return queryset
         
         
